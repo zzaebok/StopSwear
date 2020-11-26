@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">나쁜말 탐지기</string>
+    <string name="accessibility_service_description">나쁜말을 탐지하고 경고를 줍니다</string>
+    <string name="accessibility_service_label">나쁜말 탐지기</string>
+    <string name="serviceOn">나쁜말 탐지기가 작동하고 있습니다</string>
+    <string name="serviceOff">버튼을 눌러 나쁜말 탐지기를 작동시키세요</string>
+</resources>
