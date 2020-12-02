@@ -105,16 +105,24 @@ class SwearClassifier(private val context: Context) {
 
     private fun preprocessing(string: String): Array<LongArray> {
         val inputList: MutableList<Long> = mutableListOf<Long>()
-        for (char in string) {
+
+        for ((i, char) in string.withIndex()) {
+            if (i == inputLength) {
+                break
+            }
             if (char in vocabDict.keys) {
                 inputList.add(vocabDict[char]!!.toLong())
             } else {
                 inputList.add(UNK.toLong())
             }
         }
-        for (i in 1..(inputLength - inputList.size)) {
-            inputList.add(PAD.toLong())
+
+        if (inputList.size < inputLength){
+            for (i in 1..(inputLength - inputList.size)) {
+                inputList.add(PAD.toLong())
+            }
         }
+
         Log.d(TAG, "inputList: " + inputList.toString())
         val inputArray: Array<LongArray> = Array(1) { LongArray(inputLength) }
         inputArray[0] = inputList.toLongArray()
