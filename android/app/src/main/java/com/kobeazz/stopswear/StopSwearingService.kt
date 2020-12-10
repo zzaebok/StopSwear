@@ -1,7 +1,6 @@
 package com.kobeazz.stopswear
 
 import android.accessibilityservice.AccessibilityService
-import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 
 class StopSwearingService : AccessibilityService(){
@@ -20,6 +19,17 @@ class StopSwearingService : AccessibilityService(){
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+        checkInit()
+
+        if (event?.eventType == AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED) {
+            val rawText = event.text.toString()
+            val text = rawText.substring(1, rawText.length-1)
+            val inputString = jamo.stringToInput(text)
+            swearClassifier.classify(inputString)
+        }
+    }
+
+    fun checkInit() {
         if (!isJamoInitialized) {
             jamo = Jamo(this)
             isJamoInitialized = true
@@ -28,14 +38,6 @@ class StopSwearingService : AccessibilityService(){
             swearClassifier = SwearClassifier(this)
             swearClassifier.initializeInterpreter()
             isSwearClassifierInitialized = true
-        }
-
-        Log.d(TAG, "accessibility event called")
-        if (event?.eventType == AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED) {
-            val rawText = event.text.toString()
-            val text = rawText.substring(1, rawText.length-1)
-            val inputString = jamo.stringToInput(text)
-            swearClassifier.classify(inputString)
         }
     }
 

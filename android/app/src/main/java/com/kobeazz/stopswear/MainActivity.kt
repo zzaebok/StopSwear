@@ -8,8 +8,12 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +25,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        initializeDrawer()
 
         findViewById<Switch>(R.id.onOffSwitch).setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
@@ -51,6 +57,34 @@ class MainActivity : AppCompatActivity() {
             findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_very_dissatisfied_24)
             findViewById<Switch>(R.id.onOffSwitch).setChecked(false)
         }
+    }
+
+    override fun onBackPressed() {
+        val drawer = findViewById<DrawerLayout>(R.id.drawerLayout)
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    fun initializeDrawer() {
+        setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24)
+
+        val drawer = findViewById<DrawerLayout>(R.id.drawerLayout)
+        val navigationView = findViewById<NavigationView>(R.id.navigationView)
+
+        val actionBarDrawerToggle = ActionBarDrawerToggle(
+            this,
+            findViewById(R.id.drawerLayout),
+            findViewById(R.id.toolbar),
+            R.string.serviceOn,
+            R.string.serviceOff
+        )
+
+        findViewById<DrawerLayout>(R.id.drawerLayout).addDrawerListener(actionBarDrawerToggle)
     }
 
     fun checkAccessibilityPermission(): Boolean {
