@@ -26,8 +26,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // drawer
         initializeDrawer()
 
+        // onOff button
         findViewById<Switch>(R.id.onOffSwitch).setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 if (!checkAccessibilityPermission()) {
@@ -35,7 +37,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 findViewById<TextView>(R.id.switchText).text = getString(R.string.serviceOn)
                 findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_satisfied_alt_24)
-
             } else {
                 if (checkAccessibilityPermission()) {
                     unsetAccessibilityPermission()
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
                 findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_very_dissatisfied_24)
             }
         }
+
     }
 
     override fun onResume() {
@@ -83,7 +85,6 @@ class MainActivity : AppCompatActivity() {
             R.string.serviceOn,
             R.string.serviceOff
         )
-
         findViewById<DrawerLayout>(R.id.drawerLayout).addDrawerListener(actionBarDrawerToggle)
     }
 
@@ -112,6 +113,7 @@ class MainActivity : AppCompatActivity() {
         var builder = AlertDialog.Builder(this)
         builder.setTitle("접근성 권한 설정")
         builder.setMessage("나쁜말 탐지기를 이용하시기 위해서는 접근성 권한 설정이 필요합니다.")
+        builder.setCancelable(false)
         builder.setPositiveButton("확인", {
             _, _ -> startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
         })
@@ -122,6 +124,7 @@ class MainActivity : AppCompatActivity() {
         var builder = AlertDialog.Builder(this)
         builder.setTitle("접근성 권한 설정")
         builder.setMessage("나쁜말 탐지기 종료를 위해 접근성 권한을 꺼주세요.")
+        builder.setCancelable(false)
         builder.setPositiveButton("확인", {
                 _, _ -> startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
         })

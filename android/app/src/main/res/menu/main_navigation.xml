@@ -1,35 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/account"
-            android:title="계정"
-            />
-        <item
-            android:id="@+id/star"
-            android:title="즐겨찾기"
-            />
-        <item
-            android:id="@+id/cart"
-
-            android:title="장바구니"
-            />
-    </group>
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/bug_report"
-
-            android:title="버그 리포트"
-            />
-        <item
-            android:id="@+id/setting"
-
-            android:title="설정"
-            />
-        <item
-            android:id="@+id/logout"
-
-            android:title="로그아웃"
-            />
-    </group>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="내 정보">
+        <menu>
+            <group
+                android:id="@+id/groupReport"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/report"
+                    android:title="리포트 보기"
+                    />
+            </group>
+        </menu>
+    </item>
+    <item android:title="설정">
+        <menu>
+            <group
+                android:id="@+id/groupVibration"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/vibration"
+                    android:title="진동 설정"
+                    app:actionViewClass="android.widget.Switch"
+                    />
+            </group>
+        </menu>
+    </item>
+    <item android:title="이용안">
+        <menu>
+            <group
+                android:id="@+id/groupSettings"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/version"
+                    android:title="1.0.0"
+                    />
+                <item
+                    android:id="@+id/bug_report"
+                    android:title="버그 리포트"
+                    />
+                <item
+                    android:id="@+id/logout"
+                    android:title="리뷰 남기러 가기"
+                    />
+            </group>
+        </menu>
+    </item>
 </menu>
