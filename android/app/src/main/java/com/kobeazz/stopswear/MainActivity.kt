@@ -46,6 +46,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // settings
+        val navigationView = findViewById<NavigationView>(R.id.navigationView)
+        val menu = navigationView.menu
+        val vibration = menu.findItem(R.id.vibration)
+        val switch = vibration.actionView as Switch
+
+        switch.setOnCheckedChangeListener {
+            _, isChecked ->
+            Log.d(TAG, isChecked.toString())
+            val dataManager = DataManager.getInstance(this)
+            dataManager.checkVibration(isChecked)
+        }
     }
 
     override fun onResume() {

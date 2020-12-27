@@ -5,19 +5,25 @@ import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DataManager(private val context: Context) {
-    val sp: SharedPreferences
-    val editor: SharedPreferences.Editor
-    val dateFormat: SimpleDateFormat
-
-    init {
-        sp = context.getSharedPreferences(R.string.sharedPrefName.toString(), Context.MODE_PRIVATE)
-        editor = sp.edit()
-        dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    }
+class DataManager {
 
     companion object {
         private const val TAG = "DATA_MANAGER"
+
+        private var instance: DataManager? = null
+        private lateinit var sp: SharedPreferences
+        private lateinit var editor: SharedPreferences.Editor
+        private lateinit var dateFormat: SimpleDateFormat
+
+        fun getInstance(context: Context): DataManager {
+            if (instance == null) {
+                sp = context.getSharedPreferences(R.string.sharedPrefName.toString(), Context.MODE_PRIVATE)
+                editor = sp.edit()
+                dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                instance = DataManager()
+            }
+            return instance!!
+        }
     }
 
     fun logSwearingTimes() {
@@ -43,11 +49,28 @@ class DataManager(private val context: Context) {
             }
         }
         editor.commit()
-
         for (x in sp.all) {
             Log.d(TAG, x.key + " " + x.value.toString())
         }
+    }
 
+    fun checkVibration(isChecked: Boolean) {
+        Log.d(TAG, "isChecked" + isChecked.toString())
+        if (!sp.contains("vibration")) {
+            editor.putBoolean("vibration", true)
+        }
+        if (isChecked) {
+            editor.putBoolean("vibration", true)
+        } else {
+            editor.putBoolean("vibration", false)
+        }
+        editor.commit()
+        Log.d(TAG, "vibration" + sp.getBoolean("vibration", false).toString())
+    }
+
+    fun getVibration(): Boolean {
+        Log.d(TAG, "getVibration" + sp.getBoolean("vibration", false).toString())
+        return sp.getBoolean("vibration", false)
     }
 
     private fun getValidDates(dateString: String): MutableList<String> {
@@ -60,6 +83,8 @@ class DataManager(private val context: Context) {
             val previousDateString = dateFormat.format(c.time)
             dateList.add(previousDateString)
         }
+        // TODO
+        dateList.add("vibration")
         return dateList
     }
 

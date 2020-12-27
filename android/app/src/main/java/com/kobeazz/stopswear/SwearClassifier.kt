@@ -32,7 +32,7 @@ class SwearClassifier(private val context: Context) {
 
     init {
         Log.d(TAG, "SwearClassifier initialized")
-        dataManager = DataManager(context)
+        dataManager = DataManager.getInstance(context)
         jamo = Jamo(context)
         vocabList = listOf('ㄷ', 'ㅏ', 'ㄴ', 'ㄱ', 'ㅜ', 'ㅎ', 'ㄹ', 'ㅇ', 'ㅂ', 'ㅓ', 'ㅈ', 'ㅣ', ' ',
                 'ㅡ', 'ㅢ', 'ㅁ', 'ㅗ', 'ㅅ', 'ㅔ', 'ㅕ', 'ㅑ', ';', 'B', 'J', '.', 'P', 'G',
@@ -97,13 +97,16 @@ class SwearClassifier(private val context: Context) {
         if (maxIndex == 1) {
             Toast.makeText(context, "나쁜말!", Toast.LENGTH_SHORT).show()
             dataManager.logSwearingTimes()
-            
-            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            if (Build.VERSION.SDK_INT >= 26) {
-                vibrator.vibrate(VibrationEffect.createOneShot(500, 20))
-            } else {
-                vibrator.vibrate(500)
+
+            if (dataManager.getVibration()) {
+                val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                if (Build.VERSION.SDK_INT >= 26) {
+                    vibrator.vibrate(VibrationEffect.createOneShot(500, 20))
+                } else {
+                    vibrator.vibrate(500)
+                }
             }
+
         }
     }
 
