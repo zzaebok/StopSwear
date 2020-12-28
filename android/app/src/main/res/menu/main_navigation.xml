@@ -21,13 +21,13 @@
                 android:checkableBehavior="single">
                 <item
                     android:id="@+id/vibration"
-                    android:title="진동 설정"
+                    android:title="진동 끄기/켜기"
                     app:actionViewClass="android.widget.Switch"
                     />
             </group>
         </menu>
     </item>
-    <item android:title="이용안">
+    <item android:title="이용안내">
         <menu>
             <group
                 android:id="@+id/groupSettings"
@@ -35,6 +35,10 @@
                 <item
                     android:id="@+id/version"
                     android:title="1.0.0"
+                    />
+                <item
+                    android:id="@+id/howToUse"
+                    android:title="사용법"
                     />
                 <item
                     android:id="@+id/bug_report"

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
+import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
@@ -15,7 +16,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     companion object {
         private val TAG = "MAIN_ACTIVITY"
@@ -155,7 +156,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setReport() {
-        val reportItem = findViewById<NavigationView>(R.id.navigationView).menu.findItem(R.id.report)
-        // reportItem.setOnMenuItemClickListener
+        findViewById<NavigationView>(R.id.navigationView).setNavigationItemSelectedListener(this)
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.report -> {
+                val intent = Intent(this, ReportActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        return true
     }
 }

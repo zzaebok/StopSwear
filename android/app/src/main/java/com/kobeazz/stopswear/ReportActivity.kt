@@ -1,163 +1,98 @@
 package com.kobeazz.stopswear
 
-import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
-import android.text.TextUtils
-import android.util.Log
-import android.widget.ImageView
-import android.widget.Switch
-import android.widget.TextView
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
+import androidx.core.content.ContextCompat
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+
+// ref: https://chjune0205.tistory.com/81
 
 class ReportActivity : AppCompatActivity() {
 
     companion object {
-        private val TAG = "MAIN_ACTIVITY"
+        private val TAG = "REPORT_ACTIVITY"
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_report)
 
-        // drawer
-        initializeDrawer()
-
-        // onOff button
-        setOnOffButton()
-
-        // report button
-        setReport()
-
-        // settings
-        setNavigationView()
+        drawBarChart()
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (checkAccessibilityPermission()) {
-            findViewById<TextView>(R.id.switchText).text = getString(R.string.serviceOn)
-            findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_satisfied_alt_24)
-            findViewById<Switch>(R.id.onOffSwitch).setChecked(true)
-        } else {
-            findViewById<TextView>(R.id.switchText).text = getString(R.string.serviceOff)
-            findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_very_dissatisfied_24)
-            findViewById<Switch>(R.id.onOffSwitch).setChecked(false)
+    private fun drawBarChart() {
+        val entries = ArrayList<BarEntry>()
+
+        val dataManager = DataManager.getInstance(this)
+        val today = dataManager.getToday()
+        if (!dataManager.contains(today)) {
+            dataManager.updateDates()
         }
-    }
+        val daysString = dataManager.getValue("days", "String").toString()
+        val days = daysString.split("/").reversed()
+        val onlyDates = days.map {it.split("-").slice(1..2).joinToString("-")}
 
-    override fun onBackPressed() {
-        val drawer = findViewById<DrawerLayout>(R.id.drawerLayout)
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        days.forEachIndexed { i, day ->
+            entries.add(BarEntry(i.toFloat(), (dataManager.getValue(day, "Int") as Int).toFloat()))
         }
-    }
 
-    fun initializeDrawer() {
-        setSupportActionBar(findViewById(R.id.toolbar))
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24)
+        val chart = findViewById<com.github.mikephil.charting.charts.BarChart>(R.id.chart)
+        chart.run {
+            description.isEnabled = false
 
-        val drawer = findViewById<DrawerLayout>(R.id.drawerLayout)
-        val navigationView = findViewById<NavigationView>(R.id.navigationView)
+            setMaxVisibleValueCount(5)
+            setPinchZoom(false)
+            setDrawBarShadow(false)
+            setDrawGridBackground(false)
 
-        val actionBarDrawerToggle = ActionBarDrawerToggle(
-            this,
-            findViewById(R.id.drawerLayout),
-            findViewById(R.id.toolbar),
-            R.string.serviceOn,
-            R.string.serviceOff
-        )
-        findViewById<DrawerLayout>(R.id.drawerLayout).addDrawerListener(actionBarDrawerToggle)
-    }
+            axisLeft.run {
+                axisMaximum = 100F
+                axisMinimum = 0F
+                granularity = 25F
 
-    fun checkAccessibilityPermission(): Boolean {
-        val packageName = "com.kobeazz.stopswear/com.kobeazz.stopswear.StopSwearingService"
-        val accessibilityEnabled = Settings.Secure.getInt(this.contentResolver, android.provider.Settings.Secure.ACCESSIBILITY_ENABLED)
-        Log.d(TAG, "ACCESSIBILITY_ENABLED: " + accessibilityEnabled)
-        val mStringColonSplitter: TextUtils.SimpleStringSplitter = TextUtils.SimpleStringSplitter(':')
-        if (accessibilityEnabled == 1) {
-            val settingValue = Settings.Secure.getString(contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
-            if (settingValue != null) {
-                mStringColonSplitter.setString(settingValue)
-                while (mStringColonSplitter.hasNext()) {
-                    val accessibilityService = mStringColonSplitter.next()
-                    Log.d(TAG, "ACCESSIBILITY_SERVICE: " + accessibilityService)
-                    if (accessibilityService == packageName) {
-                        return true
-                    }
-                }
+                setDrawLabels(true)
+                setDrawGridLines(true)
+                setDrawAxisLine(true)
+                axisLineColor = ContextCompat.getColor(context, R.color.black)
+                gridColor = ContextCompat.getColor(context, R.color.material_on_primary_disabled)
+                textColor = ContextCompat.getColor(context, R.color.black)
+                textSize = 14F
             }
-        }
-        return false
-    }
 
-    fun setAccessibilityPermission() {
-        var builder = AlertDialog.Builder(this)
-        builder.setTitle("접근성 권한 설정")
-        builder.setMessage("나쁜말 탐지기를 이용하시기 위해서는 접근성 권한 설정이 필요합니다.")
-        builder.setCancelable(false)
-        builder.setPositiveButton("확인", {
-            _, _ -> startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-        })
-        builder.create().show()
-    }
-
-    fun unsetAccessibilityPermission() {
-        var builder = AlertDialog.Builder(this)
-        builder.setTitle("접근성 권한 설정")
-        builder.setMessage("나쁜말 탐지기 종료를 위해 접근성 권한을 꺼주세요.")
-        builder.setCancelable(false)
-        builder.setPositiveButton("확인", {
-                _, _ -> startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-        })
-        builder.create().show()
-    }
-
-    fun setOnOffButton() {
-        findViewById<Switch>(R.id.onOffSwitch).setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                if (!checkAccessibilityPermission()) {
-                    setAccessibilityPermission()
-                }
-                findViewById<TextView>(R.id.switchText).text = getString(R.string.serviceOn)
-                findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_satisfied_alt_24)
-            } else {
-                if (checkAccessibilityPermission()) {
-                    unsetAccessibilityPermission()
-                }
-                findViewById<TextView>(R.id.switchText).text = getString(R.string.serviceOff)
-                findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_very_dissatisfied_24)
+            xAxis.run {
+                position = XAxis.XAxisPosition.BOTTOM
+                granularity = 1F
+                setDrawAxisLine(true)
+                setDrawGridLines(false)
+                textColor = ContextCompat.getColor(context, R.color.black)
+                valueFormatter = IndexAxisValueFormatter(onlyDates)
+                textSize = 14F
             }
-        }
-    }
 
-    fun setNavigationView() {
-        val navigationView = findViewById<NavigationView>(R.id.navigationView)
-        val menu = navigationView.menu
-        val vibration = menu.findItem(R.id.vibration)
-        val switch = vibration.actionView as Switch
-
-        switch.setOnCheckedChangeListener {
-            _, isChecked ->
-            Log.d(TAG, isChecked.toString())
-            val dataManager = DataManager.getInstance(this)
-            dataManager.checkVibration(isChecked)
+            axisRight.isEnabled = false
+            setTouchEnabled(false)
+            animateY(1000)
+            legend.isEnabled = false
         }
-    }
 
-    fun setReport() {
-        val reportItem = findViewById<NavigationView>(R.id.navigationView).menu.findItem(R.id.report)
-        reportItem.setOnMenuItemClickListener {
-            
+        var dataset = BarDataSet(entries, "DataSet")
+        dataset.color = ContextCompat.getColor(this, R.color.design_default_color_error)
+
+        val datasetList = ArrayList<IBarDataSet>()
+        datasetList.add(dataset)
+        val barData= BarData(datasetList)
+        barData.barWidth = 0.3F
+        chart.run {
+            this.data = barData
+            setFitBars(true)
+            invalidate()
         }
+
     }
 }

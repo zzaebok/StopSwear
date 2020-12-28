@@ -33,6 +33,8 @@ android {
 }
 
 dependencies {
+    // MPAndroidChart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     // TF lite
     implementation('org.tensorflow:tensorflow-lite:0.0.0-nightly') { changing=true }
     // Klaxon
