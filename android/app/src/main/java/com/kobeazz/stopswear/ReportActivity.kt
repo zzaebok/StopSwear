@@ -15,7 +15,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 
-class MainActivity : AppCompatActivity() {
+class ReportActivity : AppCompatActivity() {
 
     companion object {
         private val TAG = "MAIN_ACTIVITY"
@@ -150,12 +150,14 @@ class MainActivity : AppCompatActivity() {
             _, isChecked ->
             Log.d(TAG, isChecked.toString())
             val dataManager = DataManager.getInstance(this)
-            dataManager.putValue("vibration", isChecked, "Boolean")
+            dataManager.checkVibration(isChecked)
         }
     }
 
     fun setReport() {
         val reportItem = findViewById<NavigationView>(R.id.navigationView).menu.findItem(R.id.report)
-        // reportItem.setOnMenuItemClickListener
+        reportItem.setOnMenuItemClickListener {
+            
+        }
     }
 }

@@ -98,7 +98,7 @@ class SwearClassifier(private val context: Context) {
             Toast.makeText(context, "나쁜말!", Toast.LENGTH_SHORT).show()
             dataManager.logSwearingTimes()
 
-            if (dataManager.getVibration()) {
+            if (dataManager.getValue("vibration", "Boolean") as Boolean) {
                 val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                 if (Build.VERSION.SDK_INT >= 26) {
                     vibrator.vibrate(VibrationEffect.createOneShot(500, 20))
