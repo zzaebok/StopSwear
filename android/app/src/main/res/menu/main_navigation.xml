@@ -24,6 +24,7 @@
                     android:id="@+id/vibration"
                     android:title="진동 끄기/켜기"
                     app:actionViewClass="android.widget.Switch"
+                    android:checkable="false"
                     />
             </group>
         </menu>
@@ -35,19 +36,23 @@
                 android:checkableBehavior="single">
                 <item
                     android:id="@+id/version"
-                    android:title="1.0.0"
+                    android:title="버전 정보: 1.0.0"
+                    android:checkable="false"
                     />
                 <item
                     android:id="@+id/howToUse"
                     android:title="사용법"
+                    android:checkable="false"
                     />
                 <item
                     android:id="@+id/bug_report"
                     android:title="버그 리포트"
+                    android:checkable="false"
                     />
                 <item
                     android:id="@+id/logout"
                     android:title="리뷰 남기러 가기"
+                    android:checkable="false"
                     />
             </group>
         </menu>

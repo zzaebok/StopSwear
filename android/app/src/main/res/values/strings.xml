@@ -5,4 +5,6 @@
     <string name="serviceOn">나쁜말 탐지기가 작동하고 있습니다</string>
     <string name="serviceOff">버튼을 눌러 나쁜말 탐지기를 작동시키세요</string>
     <string name="sharedPrefName">sharedFile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
