@@ -3,6 +3,7 @@ package com.kobeazz.stopswear
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
+import com.tbuonomo.viewpagerdotsindicator.SpringDotsIndicator
 
 class HowToUseActivity : AppCompatActivity() {
     private var howToUseDataList = ArrayList<HowToUseData>()
@@ -18,10 +19,14 @@ class HowToUseActivity : AppCompatActivity() {
 
         howToUseViewHolderAdapater = HowToUseViewHolderAdapter(howToUseDataList)
 
-        findViewById<ViewPager2>(R.id.pager).apply {
+        val pager = findViewById<ViewPager2>(R.id.pager)
+
+        pager.apply {
             adapter = howToUseViewHolderAdapater
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
         }
+
+        findViewById<SpringDotsIndicator>(R.id.spring_dots_indicator).setViewPager2(pager)
 
     }
 }
