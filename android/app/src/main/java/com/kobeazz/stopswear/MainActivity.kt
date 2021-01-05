@@ -153,6 +153,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val dataManager = DataManager.getInstance(this)
             dataManager.putValue("vibration", isChecked, "Boolean")
         }
+        switch.isChecked = true
+
+        // app version
+        val versionNumber = packageManager.getPackageInfo(packageName, 0).versionName
+        val versionInfo = menu.findItem(R.id.version)
+        versionInfo.title = "버전 정보: ${versionNumber}"
     }
 
     fun setReport() {
@@ -163,6 +169,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.report -> {
                 val intent = Intent(this, ReportActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.howToUse -> {
+                val intent = Intent(this, HowToUseActivity::class.java)
                 startActivity(intent)
             }
         }
