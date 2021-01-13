@@ -50,7 +50,7 @@
                     android:checkable="false"
                     />
                 <item
-                    android:id="@+id/logout"
+                    android:id="@+id/review"
                     android:title="리뷰 남기러 가기"
                     android:checkable="false"
                     />

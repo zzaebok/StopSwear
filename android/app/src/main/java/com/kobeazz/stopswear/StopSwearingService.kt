@@ -11,7 +11,7 @@ class StopSwearingService : AccessibilityService(){
     private var isSwearClassifierInitialized = false
 
     companion object {
-        private val TAG = "STOP_SWEARING_SERVICE"
+        private const val TAG = "STOP_SWEARING_SERVICE"
     }
 
     override fun onInterrupt() {
@@ -20,7 +20,6 @@ class StopSwearingService : AccessibilityService(){
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         checkInit()
-
         if (event?.eventType == AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED) {
             val rawText = event.text.toString()
             val text = rawText.substring(1, rawText.length-1)

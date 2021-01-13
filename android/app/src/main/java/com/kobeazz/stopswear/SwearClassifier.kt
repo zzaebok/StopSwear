@@ -21,13 +21,11 @@ class SwearClassifier(private val context: Context) {
     private val UNK = 0
     private val PAD: Int
     var isInitialized = false
-        private set
 
     private var inputLength: Int = 0 // will be inferred from TF lite model
 
     companion object {
         private const val TAG = "SWEAR_CLASSIFIER"
-        private const val MODEL_FILE = "model.tflite"
     }
 
     init {

@@ -13,13 +13,13 @@ class Jamo(private val context: Context) {
     val regex = Regex("(?<=HANGUL )(\\w+)")
     val parser: Parser = Parser.default()
 
-    var jamoToNameString: String
-    var hcjToNameString: String
-    var jamoToName: JsonObject
-    var hcjToName: JsonObject
-    var jamoToNameMap: Map<Char, String>
-    var hcjToNameMap: Map<Char, String>
-    var nameToHcjMap: Map<String, Char>
+    val jamoToNameString: String
+    val hcjToNameString: String
+    val jamoToName: JsonObject
+    val hcjToName: JsonObject
+    val jamoToNameMap: Map<Char, String>
+    val hcjToNameMap: Map<Char, String>
+    val nameToHcjMap: Map<String, Char>
 
     companion object {
         private const val TAG = "Jamo"
@@ -44,15 +44,11 @@ class Jamo(private val context: Context) {
     fun stringToInput(string: String): String {
         val jamos: MutableList<Char> = mutableListOf<Char>()
         for (char in string) {
-            Log.d(TAG, char.toString())
-            Log.d(TAG, hangleCharToJamo(char).toString())
             for (jamo in hangleCharToJamo(char)) {
                 jamos.add(jamo)
             }
         }
-        Log.d(TAG, "jamo to string" + jamos.toString())
         val jamosString = jamos.joinToString("")
-        Log.d(TAG, "jamostring" + jamos.toString())
         return jamoToHcj(jamosString).joinToString("")
     }
 

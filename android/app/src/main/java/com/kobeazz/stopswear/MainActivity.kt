@@ -19,25 +19,25 @@ import com.google.android.material.navigation.NavigationView
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     companion object {
-        private val TAG = "MAIN_ACTIVITY"
+        private const val TAG = "MAIN_ACTIVITY"
+        private const val PACKAGE_NAME = "com.kobeazz.stopswear/com.kobeazz.stopswear.StopSwearingService"
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //toolbar
+        setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24)
+
         // drawer
         initializeDrawer()
+        setFunctionsOnNavigation()
 
         // onOff button
         setOnOffButton()
-
-        // report button
-        setReport()
-
-        // settings
-        setNavigationView()
     }
 
     override fun onResume() {
@@ -63,13 +63,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun initializeDrawer() {
-        setSupportActionBar(findViewById(R.id.toolbar))
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24)
-
-        val drawer = findViewById<DrawerLayout>(R.id.drawerLayout)
-        val navigationView = findViewById<NavigationView>(R.id.navigationView)
-
         val actionBarDrawerToggle = ActionBarDrawerToggle(
             this,
             findViewById(R.id.drawerLayout),
@@ -80,79 +73,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         findViewById<DrawerLayout>(R.id.drawerLayout).addDrawerListener(actionBarDrawerToggle)
     }
 
-    fun checkAccessibilityPermission(): Boolean {
-        val packageName = "com.kobeazz.stopswear/com.kobeazz.stopswear.StopSwearingService"
-        val accessibilityEnabled = Settings.Secure.getInt(this.contentResolver, android.provider.Settings.Secure.ACCESSIBILITY_ENABLED)
-        Log.d(TAG, "ACCESSIBILITY_ENABLED: " + accessibilityEnabled)
-        val mStringColonSplitter: TextUtils.SimpleStringSplitter = TextUtils.SimpleStringSplitter(':')
-        if (accessibilityEnabled == 1) {
-            val settingValue = Settings.Secure.getString(contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
-            if (settingValue != null) {
-                mStringColonSplitter.setString(settingValue)
-                while (mStringColonSplitter.hasNext()) {
-                    val accessibilityService = mStringColonSplitter.next()
-                    Log.d(TAG, "ACCESSIBILITY_SERVICE: " + accessibilityService)
-                    if (accessibilityService == packageName) {
-                        return true
-                    }
-                }
-            }
-        }
-        return false
-    }
-
-    fun setAccessibilityPermission() {
-        var builder = AlertDialog.Builder(this)
-        builder.setTitle("접근성 권한 설정")
-        builder.setMessage("나쁜말 탐지기를 이용하시기 위해서는 접근성 권한 설정이 필요합니다.")
-        builder.setCancelable(false)
-        builder.setPositiveButton("확인", {
-            _, _ -> startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-        })
-        builder.create().show()
-    }
-
-    fun unsetAccessibilityPermission() {
-        var builder = AlertDialog.Builder(this)
-        builder.setTitle("접근성 권한 설정")
-        builder.setMessage("나쁜말 탐지기 종료를 위해 접근성 권한을 꺼주세요.")
-        builder.setCancelable(false)
-        builder.setPositiveButton("확인", {
-                _, _ -> startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-        })
-        builder.create().show()
-    }
-
-    fun setOnOffButton() {
-        findViewById<Switch>(R.id.onOffSwitch).setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                if (!checkAccessibilityPermission()) {
-                    setAccessibilityPermission()
-                }
-                findViewById<TextView>(R.id.switchText).text = getString(R.string.serviceOn)
-                findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_satisfied_alt_24)
-            } else {
-                if (checkAccessibilityPermission()) {
-                    unsetAccessibilityPermission()
-                }
-                findViewById<TextView>(R.id.switchText).text = getString(R.string.serviceOff)
-                findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_very_dissatisfied_24)
-            }
-        }
-    }
-
-    fun setNavigationView() {
+    fun setFunctionsOnNavigation() {
+        // set item click listener
         val navigationView = findViewById<NavigationView>(R.id.navigationView)
+        navigationView.setNavigationItemSelectedListener(this)
+
+        // vibration setting
         val menu = navigationView.menu
         val vibration = menu.findItem(R.id.vibration)
         val switch = vibration.actionView as Switch
-
         switch.setOnCheckedChangeListener {
             _, isChecked ->
             Log.d(TAG, isChecked.toString())
             val dataManager = DataManager.getInstance(this)
             dataManager.putValue("vibration", isChecked, "Boolean")
         }
+        // default vibration = true
         switch.isChecked = true
 
         // app version
@@ -161,9 +97,58 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         versionInfo.title = "버전 정보: ${versionNumber}"
     }
 
-    fun setReport() {
-        findViewById<NavigationView>(R.id.navigationView).setNavigationItemSelectedListener(this)
+    fun checkAccessibilityPermission(): Boolean {
+        val accessibilityEnabled = Settings.Secure.getInt(contentResolver, android.provider.Settings.Secure.ACCESSIBILITY_ENABLED)
+        Log.d(TAG, "ACCESSIBILITY_ENABLED: " + accessibilityEnabled)
+        val mStringColonSplitter: TextUtils.SimpleStringSplitter = TextUtils.SimpleStringSplitter(':')
+        if (accessibilityEnabled == 1) {
+            val settingValue = Settings.Secure.getString(contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
+            mStringColonSplitter.setString(settingValue)
+            mStringColonSplitter.forEach {
+                if (it == PACKAGE_NAME) {
+                    return true
+                }
+            }
+        }
+        return false
     }
+
+    fun showAccessibilityPermission(mode: String) {
+        val message: String
+        when (mode) {
+            "on" -> message = "나쁜말 탐지기를 이용하시기 위해서는 접근성 권한 설정이 필요합니다. 사용자의 데이터는 절대로 수집되지 않습니다."
+            "off" -> message = "나쁜말 탐지기 종료를 위해 접근성 권한을 꺼주세요."
+            else -> message = "mode 오류, 버그 리포트 부탁드립니다."
+        }
+
+        var builder = AlertDialog.Builder(this)
+        builder.setTitle("접근성 권한 설정")
+        builder.setMessage(message)
+        builder.setCancelable(false)
+        builder.setPositiveButton("확인", {
+            _, _ -> startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+        })
+        builder.create().show()
+    }
+
+    fun setOnOffButton() {
+        findViewById<Switch>(R.id.onOffSwitch).setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                if (!checkAccessibilityPermission()) {
+                    showAccessibilityPermission("on")
+                }
+                findViewById<TextView>(R.id.switchText).text = getString(R.string.serviceOn)
+                findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_satisfied_alt_24)
+            } else {
+                if (checkAccessibilityPermission()) {
+                    showAccessibilityPermission("off")
+                }
+                findViewById<TextView>(R.id.switchText).text = getString(R.string.serviceOff)
+                findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_very_dissatisfied_24)
+            }
+        }
+    }
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -171,9 +156,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val intent = Intent(this, ReportActivity::class.java)
                 startActivity(intent)
             }
+            R.id.vibration -> {
+                val switch = findViewById<NavigationView>(R.id.navigationView).menu.findItem(R.id.vibration).actionView as Switch
+                switch.isChecked = !switch.isChecked
+            }
             R.id.howToUse -> {
                 val intent = Intent(this, HowToUseActivity::class.java)
                 startActivity(intent)
+            }
+            R.id.bug_report -> {
+
+            }
+            R.id.review -> {
+
             }
         }
         return true
