@@ -13,9 +13,10 @@ class HowToUseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_how_to_use)
 
-        howToUseDataList.add(HowToUseData(R.drawable.ic_baseline_menu_24, "1 페이지"))
-        howToUseDataList.add(HowToUseData(R.drawable.ic_baseline_menu_24, "2 페이지"))
-        howToUseDataList.add(HowToUseData(R.drawable.ic_baseline_menu_24, "3 페이지"))
+        howToUseDataList.add(HowToUseData(R.drawable.ic_baseline_menu_24, "버튼을 눌러 나쁜말 탐지기를 작동합니다."))
+        howToUseDataList.add(HowToUseData(R.drawable.ic_baseline_menu_24, "접근성 권한을 설정해주어야 합니다."))
+        howToUseDataList.add(HowToUseData(R.drawable.ic_baseline_menu_24, "접근성 권한 사용에 동의해주세요.\n정보는 절대 서버로 보내지지 않습니다."))
+        howToUseDataList.add(HowToUseData(R.drawable.ic_baseline_menu_24, "메세지를 입력할 때 나쁜말을 탐지하면 경고가 발생합니다."))
 
         howToUseViewHolderAdapater = HowToUseViewHolderAdapter(howToUseDataList)
 

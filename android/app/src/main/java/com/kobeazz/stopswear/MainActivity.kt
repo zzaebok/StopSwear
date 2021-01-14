@@ -1,6 +1,8 @@
 package com.kobeazz.stopswear
 
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
@@ -95,6 +97,42 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val versionNumber = packageManager.getPackageInfo(packageName, 0).versionName
         val versionInfo = menu.findItem(R.id.version)
         versionInfo.title = "버전 정보: ${versionNumber}"
+
+        // navigation header
+        setNavigationHeader()
+    }
+
+    fun setNavigationHeader() {
+        val dataManager = DataManager.getInstance(this)
+        val today = dataManager.getToday()
+        if (!dataManager.contains(today)) {
+            dataManager.updateDates()
+        }
+        val daysString = dataManager.getValue("days", "String").toString()
+        val days = daysString.split("/").reversed()
+        var averageSwear = 0f
+        days.forEachIndexed { i, day ->
+            val swearTime = dataManager.getValue(day, "Int") as Int
+            averageSwear += swearTime
+        }
+        averageSwear /= days.size
+
+        val navigationViewHeader = findViewById<NavigationView>(R.id.navigationView).getHeaderView(0)
+        val headerImage = navigationViewHeader.findViewById<ImageView>(R.id.headerImage)
+        val headerText1 = navigationViewHeader.findViewById<TextView>(R.id.headerText1)
+        val headerText2 = navigationViewHeader.findViewById<TextView>(R.id.headerText2)
+
+        if (averageSwear <= 10.0f) {
+            headerImage.setImageResource(R.drawable.ic_baseline_menu_24)
+            headerText1.text = "청정수"
+            headerText2.text = "훌륭해요! 이대로 이쁜말만 사용하자구요!"
+        } else if (averageSwear <= 30.0f) {
+            headerImage.setImageResource(R.drawable.ic_baseline_menu_24)
+            headerText1.text = "욕린이"
+            headerText2.text = "위험해요, 욕쟁이가 되어가고 있어요!"
+        } else {
+            // do nothing. Default value
+        }
     }
 
     fun checkAccessibilityPermission(): Boolean {
@@ -165,7 +203,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(intent)
             }
             R.id.bug_report -> {
-
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse("mailto:")
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf("kobeazzlee@gmail.com"))
+                    putExtra(Intent.EXTRA_SUBJECT, "[나쁜말 탐지기] 버그 리포트")
+                    putExtra(Intent.EXTRA_TEXT, "문의 내용(자세히):\n" +
+                            "\n\n" +
+                            "-------------------------------\n" +
+                            "앱버전: ${BuildConfig.VERSION_NAME}\n" +
+                            "기기: ${Build.MODEL}\n" +
+                            "안드로이드 버전: ${Build.VERSION.RELEASE}")
+                }
+                startActivity(intent)
             }
             R.id.review -> {
 
