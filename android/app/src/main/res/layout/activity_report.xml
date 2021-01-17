@@ -25,35 +25,45 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.14"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/chart"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="25dp"
-        android:text="사용 안내"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chart" />
+    <View
+        android:id="@+id/usageLine"
+        android:layout_width="300dp"
+        android:layout_height="2dp"
+        android:background="#FF999999"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="@+id/chart"
+        app:layout_constraintTop_toBottomOf="@+id/chart"/>
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="313dp"
+        android:id="@+id/usageGuide"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="사용 안내"
+        app:layout_constraintStart_toStartOf="@+id/chart"
+        app:layout_constraintTop_toBottomOf="@+id/usageLine" />
+
+    <TextView
+        android:id="@+id/usageExplanation"
+        android:layout_width="300dp"
         android:layout_height="188dp"
         android:layout_marginTop="12dp"
         android:text="욕설 리포트는 오늘을 포함하여 최근 5일간 욕설사용 현황을 알려드리고 있습니다.\n\n단, 한 문장의 욕설의 경우 지우지 않고 계속 사용하신다면 1회 이상으로 카운트 될 수 있습니다."
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintStart_toStartOf="@+id/chart"
+        app:layout_constraintTop_toBottomOf="@+id/usageGuide" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chart"
-        android:layout_width="345dp"
+        android:layout_width="300dp"
         android:layout_height="191dp"
+        android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
