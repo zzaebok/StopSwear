@@ -26,7 +26,10 @@ def get_urls():
     return urls
 
 def crawl_board(url):
-    soup = get_soup_obj(url)
+    try:
+        soup = get_soup_obj(url)
+    except requests.exceptions.ConnectionError:
+        return []
     titles = soup.find_all("tr", attrs={"class": "ub-content us-post"})
     if len(titles):
         texts = []

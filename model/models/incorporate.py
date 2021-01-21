@@ -12,3 +12,4 @@ with open('normals.txt', 'a') as f_normal, open('swears.txt', 'a') as f_swear:
                 f_swear.write(line)
             else:
                 f_normal.write(line)
+                
