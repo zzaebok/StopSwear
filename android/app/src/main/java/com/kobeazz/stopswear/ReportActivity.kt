@@ -1,6 +1,7 @@
 package com.kobeazz.stopswear
 
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -24,6 +25,9 @@ class ReportActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_report)
+
+        findViewById<TextView>(R.id.toolbarTitle).setText("리포트 보기")
+        findViewById<ImageButton>(R.id.toolbarBackbutton).setOnClickListener { this.onBackPressed() }
 
         drawBarChart()
     }

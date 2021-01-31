@@ -3,18 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="230dp">
+    android:layout_height="wrap_content">
+
+    <include
+        layout="@layout/toolbar_title"
+        android:id="@+id/toolbarTitleLayout"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:id="@+id/headerImage"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="150dp"
+        android:scaleType="centerCrop"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_menu_24"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarTitleLayout"
+        app:srcCompat="@drawable/adult"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView

@@ -1,6 +1,8 @@
 package com.kobeazz.stopswear
 
 import android.os.Bundle
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.tbuonomo.viewpagerdotsindicator.SpringDotsIndicator
@@ -28,6 +30,9 @@ class HowToUseActivity : AppCompatActivity() {
         }
 
         findViewById<SpringDotsIndicator>(R.id.spring_dots_indicator).setViewPager2(pager)
+
+        findViewById<TextView>(R.id.toolbarTitle).setText("사용법")
+        findViewById<ImageButton>(R.id.toolbarBackbutton).setOnClickListener { this.onBackPressed() }
 
     }
 }

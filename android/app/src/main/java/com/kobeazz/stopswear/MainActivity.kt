@@ -8,6 +8,7 @@ import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
 import android.view.MenuItem
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
@@ -46,11 +47,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onResume()
         if (checkAccessibilityPermission()) {
             findViewById<TextView>(R.id.switchText).text = getString(R.string.serviceOn)
-            findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_satisfied_alt_24)
+            findViewById<TextView>(R.id.onOffText).text = "ON"
+            findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_pale_btn)
             findViewById<Switch>(R.id.onOffSwitch).setChecked(true)
         } else {
             findViewById<TextView>(R.id.switchText).text = getString(R.string.serviceOff)
-            findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_very_dissatisfied_24)
+            findViewById<TextView>(R.id.onOffText).text = "OFF"
+            findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_deep_btn)
             findViewById<Switch>(R.id.onOffSwitch).setChecked(false)
         }
     }
@@ -73,6 +76,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.string.serviceOff
         )
         findViewById<DrawerLayout>(R.id.drawerLayout).addDrawerListener(actionBarDrawerToggle)
+
     }
 
     fun setFunctionsOnNavigation() {
@@ -123,16 +127,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val headerText2 = navigationViewHeader.findViewById<TextView>(R.id.headerText2)
 
         if (averageSwear <= 10.0f) {
-            headerImage.setImageResource(R.drawable.ic_baseline_menu_24)
+            headerImage.setImageResource(R.drawable.child)
             headerText1.text = "청정수"
             headerText2.text = "훌륭해요! 이대로 이쁜말만 사용하자구요!"
         } else if (averageSwear <= 30.0f) {
-            headerImage.setImageResource(R.drawable.ic_baseline_menu_24)
+            headerImage.setImageResource(R.drawable.teenager)
             headerText1.text = "욕린이"
             headerText2.text = "위험해요, 욕쟁이가 되어가고 있어요!"
         } else {
             // do nothing. Default value
         }
+
+        navigationViewHeader.findViewById<ImageButton>(R.id.toolbarBackbutton).setOnClickListener { this.onBackPressed() }
     }
 
     fun checkAccessibilityPermission(): Boolean {
@@ -176,13 +182,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     showAccessibilityPermission("on")
                 }
                 findViewById<TextView>(R.id.switchText).text = getString(R.string.serviceOn)
-                findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_satisfied_alt_24)
+                findViewById<TextView>(R.id.onOffText).text = "ON"
+                findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_pale_btn)
             } else {
                 if (checkAccessibilityPermission()) {
                     showAccessibilityPermission("off")
                 }
                 findViewById<TextView>(R.id.switchText).text = getString(R.string.serviceOff)
-                findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_baseline_sentiment_very_dissatisfied_24)
+                findViewById<TextView>(R.id.onOffText).text = "OFF"
+                findViewById<ImageView>(R.id.onOffImage).setImageResource(R.drawable.ic_deep_btn)
             }
         }
     }
