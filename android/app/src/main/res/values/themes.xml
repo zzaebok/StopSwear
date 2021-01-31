@@ -29,6 +29,6 @@
         <item name="colorSwitchThumbNormal">#f1f1f1</item>
 
         <!-- inactive track color (30% transparency) -->
-        <item name="android:colorForeground">#42221f1f</item>
+        <item name="android:colorForeground">#44ffffff</item>
     </style>
 </resources>

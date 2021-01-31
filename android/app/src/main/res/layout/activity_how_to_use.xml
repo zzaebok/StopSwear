@@ -8,11 +8,6 @@
     android:orientation="vertical"
     tools:context=".HowToUseActivity">
 
-    <include
-        layout="@layout/toolbar_title"
-        android:id="@+id/toolbarTitleLayout"
-        />
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager"
         android:layout_width="match_parent"
@@ -28,8 +23,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"
         app:dampingRatio="0.5"
-        app:dotsColor="@color/cardview_dark_background"
-        app:dotsStrokeColor="@color/black"
+        app:dotsColor="@color/pale_green"
+        app:dotsStrokeColor="@color/moss_green"
         app:dotsCornerRadius="2dp"
         app:dotsSize="16dp"
         app:dotsSpacing="6dp"
