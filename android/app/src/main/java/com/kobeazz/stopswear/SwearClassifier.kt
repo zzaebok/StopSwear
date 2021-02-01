@@ -98,6 +98,7 @@ class SwearClassifier(private val context: Context) {
 
             if (dataManager.getValue("vibration", "Boolean") as Boolean) {
                 val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                @Suppress("DEPRECATION")
                 if (Build.VERSION.SDK_INT >= 26) {
                     vibrator.vibrate(VibrationEffect.createOneShot(500, 20))
                 } else {
