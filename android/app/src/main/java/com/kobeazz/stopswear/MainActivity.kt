@@ -224,9 +224,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
                 startActivity(intent)
             }
-            R.id.review -> {
-
-            }
+//            R.id.review -> {
+//
+//            }
         }
         return true
     }
