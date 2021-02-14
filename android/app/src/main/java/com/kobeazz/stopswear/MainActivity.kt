@@ -142,12 +142,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun checkAccessibilityPermission(): Boolean {
-        val accessibilityEnabled = Settings.Secure.getInt(contentResolver, android.provider.Settings.Secure.ACCESSIBILITY_ENABLED)
+        var accessibilityEnabled = 0
+        try {
+            accessibilityEnabled = Settings.Secure.getInt(contentResolver, android.provider.Settings.Secure.ACCESSIBILITY_ENABLED)
+        } catch (e: Settings.SettingNotFoundException) {
+            Log.v(TAG, "Settings Not Found")
+        }
         Log.d(TAG, "ACCESSIBILITY_ENABLED: " + accessibilityEnabled)
         val mStringColonSplitter: TextUtils.SimpleStringSplitter = TextUtils.SimpleStringSplitter(':')
         if (accessibilityEnabled == 1) {
             val settingValue = Settings.Secure.getString(contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
-            mStringColonSplitter.setString(settingValue)
+            mStringColonSplitter.setString(settingValue?:"")
             mStringColonSplitter.forEach {
                 if (it == PACKAGE_NAME) {
                     return true
