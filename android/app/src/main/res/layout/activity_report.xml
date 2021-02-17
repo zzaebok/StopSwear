@@ -60,7 +60,7 @@
         android:layout_width="300dp"
         android:layout_height="188dp"
         android:layout_marginTop="12dp"
-        android:text="욕설 리포트는 오늘을 포함하여 최근 5일간 욕설사용 현황을 알려드리고 있습니다.\n\n단, 한 문장의 욕설의 경우 지우지 않고 계속 사용하신다면 1회 이상으로 카운트 될 수 있습니다.\n\n예를 들어 '^^ㅣ발아'라는 욕설의 경우 '^^ㅣ발'까지 입력 시 1회, '^^ㅣ발ㅇ'에 2회, '^^ㅣ발아'에 3회로 기록될 수 있습니다."
+        android:text="욕설 리포트는 오늘을 포함하여 최근 5일간 욕설사용 현황을 알려드리고 있습니다.\n\n단, 한 문장의 욕설의 경우 지우지 않고 계속 사용하신다면 1회 이상으로 카운트 될 수 있습니다."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.02"
         app:layout_constraintStart_toStartOf="@+id/chart"
