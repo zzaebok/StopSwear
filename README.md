@@ -9,7 +9,7 @@ Unlike traditional swear detection algorithms that rely on static dictionaries, 
 ### Training
 
 The training dataset was collected by crawling online community sites and was manually labeled.
-The model was trained and converted to an on-device format using TensorFlow and TFLite.
+The model was trained and converted to an on-device format using **TensorFlow** and **TFLite**.
 For detailed training information, check out model/train.ipynb.
 
 ### Screenshots
